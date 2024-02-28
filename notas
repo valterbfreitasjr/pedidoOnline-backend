@@ -1,0 +1,133 @@
+## Libs iniciais
+
+    - npm i -D @types/node nodemon rimraf ts-node typescript
+
+    #rimraf - irá apagar o diretório.
+    #nodemon - detecta mudanças dentro da pasta /src e executa o build de forma automática.
+    
+## Iniciar o Typescript Compiler (TSC)
+
+    - npx tsc --init
+    -> "outDir": "./build"  -- realizar o ajuste no arquivo tsconfig.json, para transpilar tudo que está na /src para pasta /build.
+    - npx tsc  // Irá gerar a nossa pasta ./build
+
+    ## Ajustes no 'package-json' -- para utilizar digita: npm run build/dev/start 
+
+    "scripts": {
+    "build": "rimraf ./build && tsc",
+    "dev": "nodemon",
+    "start": "yarn build && node build/index.js"
+  }
+
+## Express
+
+    -> npm i dotenv express
+    -> npm i -D @types/express   - @types, utilizado para importar todos os tipos da biblioteca em questão, pois há casos em que ainda não foram incorporados os tipos nativos.
+
+    Step:
+        1 - Criar o ' .env ' na raíz do projeto;
+
+        2 - Realizar a importação do .env e Express: 
+                import dotenv from "dotenv";
+                import express, { Express, Request, Response } from "express";
+                dotenv.config();
+
+        3 - 
+                const app: Express = express();
+                const port = process.env.PORT ?? 5001;
+                app.use(express.json());
+
+        4 - Definir as Rotas
+                app.get("/", (req: Request, res: Response) => {
+                res.send("Hello World");
+                });
+
+        5 - Subir o server para escutar na porta definida no .env
+            app.listen(port, () => {
+            console.log(`Server running on port ${port}`);
+            });
+
+## Docker
+
+    - Utilizando o Docker Desktop
+
+    Step:
+        1 - Criar o arquivo ' docker-compose.yml ' na raíz do projeto
+
+            Definir:
+                version: "3.7"
+                services:
+                    postgres:
+                        image: postgres:14
+                        restart: aways
+                        environment:
+                        POSTGRES_DB: develop
+                        POSTGRES_USER: postgres
+                        POSTGRES_PASSWORD: secret
+                        PGDATA: /var/lib/postgresql/data
+                        ports: #Primeira porta (sua máquina) - Segunda (Docker Contâiner)
+                        - "5432:5432"
+                        volumes: #Caso seja necessário matar o contâiner, ao inicia-lo novamente, será enviado os dados da sua máquina ao volume('hd') do contâiner.
+                        - postgres-data:/var/lib/postgresql/data
+                volumes:
+                    postgres-data:
+    
+    2 - Instalar o serviço do PgAdmin - adicionar aos 'services'
+        
+        pgadmin:
+            image: dpage/pgadmin4
+            restart: always
+            ports:
+                - 8000:80
+            volumes:
+                - pgadmin-data:/var/lib/pgadmin
+            environment:
+                PGADMIN_DEFAULT_EMAIL: admin@admin.com
+                PGADMIN_DEFAULT_PASSWORD: secret
+            depends_on:
+                - postgres
+
+    ** Sinalizar a dependência (depends_on) do 'postgres'
+
+    ** Rodar no console: docker-compose up -d   ##Verificar se o plugin docker-compose está instalado.
+
+    ** Verificar no 'Docker-Desktop' os contâiners que estão running.
+
+
+## Prisma(ORM)
+
+    - npm i -D prisma
+    - npx prisma init
+    ** Instalar o plugin: Prisma
+
+    script: 
+        "db:format": "prisma format",
+        "db:migrate": "prisma migrate dev",
+        "db:seed": "prisma db seed"
+    "prisma": {
+        "seed": "ts-node prisma/seeds.ts"
+    }
+
+    1 - Criar a pasta 'migrate'
+        Escrever o schema da model, então rodar 'npm run db:migrate'
+
+    ##PRISMA
+        prisma.upsert  (update + insert);
+        CreateMany = cria vários registros à partir de um array;
+
+    
+## CORS
+
+    - npm i cors
+    - npn i -D @types/cors
+
+    - Utilizado para comunicar o front  o backend em projetos diferentes.
+
+
+
+
+
+
+
+
+
