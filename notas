@@ -62,8 +62,8 @@
                         restart: aways
                         environment:
                         POSTGRES_DB: develop
-                        POSTGRES_USER: postgres
-                        POSTGRES_PASSWORD: secret
+                        POSTGRES_USER: [postgres_login]
+                        POSTGRES_PASSWORD: [postgres_password]
                         PGDATA: /var/lib/postgresql/data
                         ports: #Primeira porta (sua máquina) - Segunda (Docker Contâiner)
                         - "5432:5432"
@@ -82,8 +82,8 @@
             volumes:
                 - pgadmin-data:/var/lib/pgadmin
             environment:
-                PGADMIN_DEFAULT_EMAIL: admin@admin.com
-                PGADMIN_DEFAULT_PASSWORD: secret
+                PGADMIN_DEFAULT_EMAIL: [pgAdmin_email_login]
+                PGADMIN_DEFAULT_PASSWORD: [pgAdmin_password]
             depends_on:
                 - postgres
 
