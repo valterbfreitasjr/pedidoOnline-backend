@@ -8,8 +8,8 @@ services:
     volumes:
       - pgadmin-data:/var/lib/pgadmin
     environment:
-      PGADMIN_DEFAULT_EMAIL: admin@admin.com
-      PGADMIN_DEFAULT_PASSWORD: secret
+      PGADMIN_DEFAULT_EMAIL: [pgAdmin_login_email]
+      PGADMIN_DEFAULT_PASSWORD: [pgAdmin_password]
     depends_on:
       - postgres
 
